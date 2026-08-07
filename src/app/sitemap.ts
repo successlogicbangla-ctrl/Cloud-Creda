@@ -6,7 +6,10 @@ import { getArticles } from "@/lib/data/articles";
 import { getProviderHref } from "@/lib/utils";
 import { comparisons } from "@/lib/comparisons";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// Production domain — never localhost, even if NEXT_PUBLIC_SITE_URL isn't set
+// in the deploy environment. Override via NEXT_PUBLIC_SITE_URL only for a
+// non-production deployment (e.g. a staging domain).
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.cloudcreda.com";
 
 const staticRoutes = [
   "",

@@ -12,7 +12,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// Production domain — never localhost, even if NEXT_PUBLIC_SITE_URL isn't set
+// in the deploy environment. This only resolves relative canonical/OG URLs
+// against the right base; it doesn't change any page's canonical path itself.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.cloudcreda.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

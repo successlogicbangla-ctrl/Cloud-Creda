@@ -18,6 +18,7 @@ import type {
   Review,
   SiteSettings,
 } from "./types";
+import { TELEGRAM_URL } from "./telegram";
 
 export const mockProviders: Provider[] = [
   {
@@ -500,9 +501,9 @@ export const mockSiteSettings: SiteSettings = {
   site_name: "CloudCreda",
   logo_url: null,
   favicon_url: null,
-  default_telegram_link: "https://t.me/your_channel",
+  default_telegram_link: TELEGRAM_URL,
   support_email: "support@cloudcreda.com",
-  social_links: { telegram: "https://t.me/your_channel" },
+  social_links: { telegram: TELEGRAM_URL },
   footer_columns: [],
   default_seo: {
     title: "Cloud Accounts, Credits & Digital Services",

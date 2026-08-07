@@ -8,8 +8,8 @@ import { comparisons, getAllComparisonSlugs, getComparisonBySlug } from "@/lib/c
 import { getComparisonContent } from "@/lib/comparison-content";
 import { getProviderBySlug } from "@/lib/data/providers";
 import { getProducts } from "@/lib/data/products";
-import { getSiteSettings } from "@/lib/data/settings";
 import { formatPrice, getProviderHref } from "@/lib/utils";
+import { TELEGRAM_URL } from "@/lib/telegram";
 import type { Provider, Product } from "@/lib/types";
 
 interface PageProps {
@@ -119,13 +119,10 @@ async function FallbackComparisonPage({ slug }: { slug: string }) {
   ]);
   if (!providerA || !providerB) notFound();
 
-  const [productsA, productsB, settings] = await Promise.all([
+  const [productsA, productsB] = await Promise.all([
     getProducts({ providerSlug: providerA.slug, sort: "price_asc", limit: 4 }),
     getProducts({ providerSlug: providerB.slug, sort: "price_asc", limit: 4 }),
-    getSiteSettings(),
   ]);
-
-  const telegramLink = settings.default_telegram_link;
 
   return (
     <div className="container-page py-10">
@@ -169,11 +166,9 @@ async function FallbackComparisonPage({ slug }: { slug: string }) {
           Not sure which one fits your project? Message our team and we&rsquo;ll help you choose.
         </p>
         <div className="relative mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          {telegramLink && (
-            <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="btn-primary">
-              <MessageCircle className="h-4 w-4" /> Chat on Telegram
-            </a>
-          )}
+          <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+            <MessageCircle className="h-4 w-4" /> Chat on Telegram
+          </a>
           <Link
             href="/compare"
             className="btn-secondary !border-white/20 !bg-transparent !text-white hover:!border-sky-accent hover:!text-sky-accent"
@@ -203,10 +198,9 @@ export default async function ComparisonDetailPage({ params }: PageProps) {
   ]);
   if (!providerA || !providerB) notFound();
 
-  const [productsA, productsB, settings] = await Promise.all([
+  const [productsA, productsB] = await Promise.all([
     getProducts({ providerSlug: providerA.slug, sort: "price_asc", limit: 6 }),
     getProducts({ providerSlug: providerB.slug, sort: "price_asc", limit: 6 }),
-    getSiteSettings(),
   ]);
 
   const relatedComparisons = comparisons
@@ -228,7 +222,6 @@ export default async function ComparisonDetailPage({ params }: PageProps) {
       productsA={productsA}
       productsB={productsB}
       relatedComparisons={relatedComparisons}
-      telegramLink={settings.default_telegram_link}
     />
   );
 }

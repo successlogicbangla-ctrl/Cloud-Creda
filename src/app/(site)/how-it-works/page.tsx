@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Search, MessageCircle, PackageCheck, LifeBuoy, ArrowRight } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { getSiteSettings } from "@/lib/data/settings";
+import { TELEGRAM_URL } from "@/lib/telegram";
 
 export const metadata: Metadata = {
   title: "How It Works",
@@ -38,8 +38,6 @@ const steps = [
 ];
 
 export default async function HowItWorksPage() {
-  const settings = await getSiteSettings();
-
   return (
     <div className="container-page py-10">
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "How It Works" }]} />
@@ -74,15 +72,13 @@ export default async function HowItWorksPage() {
         </Link>
       </div>
 
-      {settings.default_telegram_link && (
-        <p className="mt-6 text-center text-sm text-ink-muted">
-          Prefer to ask first?{" "}
-          <a href={settings.default_telegram_link} target="_blank" rel="noopener noreferrer" className="font-medium text-accent-blue">
-            Message us on Telegram
-          </a>
-          .
-        </p>
-      )}
+      <p className="mt-6 text-center text-sm text-ink-muted">
+        Prefer to ask first?{" "}
+        <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="font-medium text-accent-blue">
+          Message us on Telegram
+        </a>
+        .
+      </p>
     </div>
   );
 }

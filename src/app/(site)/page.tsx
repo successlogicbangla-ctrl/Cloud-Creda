@@ -29,6 +29,7 @@ import { getFeaturedProducts } from "@/lib/data/products";
 import { getSiteSettings } from "@/lib/data/settings";
 import { homeContent } from "@/lib/home-content";
 import { getProviderHref } from "@/lib/utils";
+import { TELEGRAM_URL } from "@/lib/telegram";
 
 const whyChooseIcons: LucideIcon[] = [ShieldCheck, Zap, MessageCircle, Tags, RefreshCcw, Lock];
 const howItWorksIcons: LucideIcon[] = [Compass, ShoppingCart, CreditCard, Mail, Rocket];
@@ -60,7 +61,6 @@ export default async function HomePage() {
 
   const providerBySlug = new Map(providers.map((p) => [p.slug, p]));
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const telegramLink = settings.default_telegram_link;
 
   return (
     <>
@@ -106,16 +106,14 @@ export default async function HomePage() {
               <Link href="/products" className="btn-primary w-full shrink-0 sm:w-auto">
                 Browse All Products <ArrowRight className="h-4 w-4" />
               </Link>
-              {telegramLink && (
-                <a
-                  href={telegramLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-secondary w-full shrink-0 !border-white/20 !bg-transparent !text-white hover:!border-sky-accent hover:!text-sky-accent sm:w-auto"
-                >
-                  <MessageCircle className="h-4 w-4" /> Chat on Telegram
-                </a>
-              )}
+              <a
+                href={TELEGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary w-full shrink-0 !border-white/20 !bg-transparent !text-white hover:!border-sky-accent hover:!text-sky-accent sm:w-auto"
+              >
+                <MessageCircle className="h-4 w-4" /> Chat on Telegram
+              </a>
             </div>
           </div>
 
@@ -242,7 +240,7 @@ export default async function HomePage() {
             </div>
             <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {featuredProducts.map((product, i) => (
-                <HomeProductCard key={product.id} product={product} telegramLink={telegramLink} index={i} />
+                <HomeProductCard key={product.id} product={product} index={i} />
               ))}
             </div>
           </div>
@@ -371,11 +369,9 @@ export default async function HomePage() {
               ))}
             </div>
             <div className="relative flex flex-col gap-3 sm:flex-row">
-              {telegramLink && (
-                <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                  <MessageCircle className="h-4 w-4" /> Chat on Telegram
-                </a>
-              )}
+              <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+                <MessageCircle className="h-4 w-4" /> Chat on Telegram
+              </a>
               <Link
                 href="/products"
                 className="btn-secondary !border-white/20 !bg-transparent !text-white hover:!border-sky-accent hover:!text-sky-accent"

@@ -3,6 +3,7 @@ import { Mail, MessageCircle } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ContactForm } from "@/components/site/ContactForm";
 import { getSiteSettings } from "@/lib/data/settings";
+import { TELEGRAM_URL } from "@/lib/telegram";
 
 export const metadata: Metadata = {
   title: "Contact / Support",
@@ -24,22 +25,20 @@ export default async function ContactPage() {
       </div>
 
       <div className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
-        {settings.default_telegram_link && (
-          <a
-            href={settings.default_telegram_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="card-surface card-surface-hover flex items-center gap-3 p-5"
-          >
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-blue/10 text-accent-blue">
-              <MessageCircle className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="font-semibold text-ink">Telegram</p>
-              <p className="text-sm text-ink-muted">Fastest response, usually within minutes</p>
-            </div>
-          </a>
-        )}
+        <a
+          href={TELEGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="card-surface card-surface-hover flex items-center gap-3 p-5"
+        >
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-blue/10 text-accent-blue">
+            <MessageCircle className="h-5 w-5" />
+          </span>
+          <div>
+            <p className="font-semibold text-ink">Telegram</p>
+            <p className="text-sm text-ink-muted">Fastest response, usually within minutes</p>
+          </div>
+        </a>
         {settings.support_email && (
           <a
             href={`mailto:${settings.support_email}`}

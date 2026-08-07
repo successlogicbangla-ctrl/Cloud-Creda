@@ -10,7 +10,6 @@ import { FaqAccordion } from "@/components/site/FaqAccordion";
 import { getProductBySlug, getProducts, getRelatedProducts } from "@/lib/data/products";
 import { getFaqs } from "@/lib/data/faqs";
 import { getArticles } from "@/lib/data/articles";
-import { getSiteSettings } from "@/lib/data/settings";
 import { formatPrice, getProviderHref } from "@/lib/utils";
 
 interface PageProps {
@@ -40,15 +39,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const [faqs, related, articles, settings] = await Promise.all([
+  const [faqs, related, articles] = await Promise.all([
     getFaqs({ productId: product.id }),
     getRelatedProducts(product),
     getArticles(),
-    getSiteSettings(),
   ]);
 
   const relatedArticles = articles.filter((a) => a.related_product_ids.includes(product.id));
-  const telegramLink = product.telegram_link || settings.default_telegram_link || "https://t.me/";
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const productJsonLd = {
@@ -175,7 +172,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
               <BuyNowButton
                 productId={product.id}
-                telegramLink={telegramLink}
                 size="lg"
                 className="mt-5"
               />

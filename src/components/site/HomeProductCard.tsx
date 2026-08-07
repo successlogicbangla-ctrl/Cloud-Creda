@@ -19,16 +19,13 @@ const iconLibrary = Icons as unknown as Record<string, LucideIcon>;
  */
 export function HomeProductCard({
   product,
-  telegramLink,
   index = 0,
 }: {
   product: Product;
-  telegramLink: string | null;
   index?: number;
 }) {
   const categoryIcon = product.category?.icon;
   const Icon = (categoryIcon && iconLibrary[categoryIcon]) || Cloud;
-  const productTelegramLink = product.telegram_link || telegramLink || "https://t.me/";
 
   return (
     <div className="card-surface card-surface-hover group flex flex-col overflow-hidden transition-all duration-300 hover:shadow-[var(--shadow-glow-blue)]">
@@ -89,7 +86,6 @@ export function HomeProductCard({
 
         <BuyNowButton
           productId={product.id}
-          telegramLink={productTelegramLink}
           label="Order Now"
           className="mt-4 w-full justify-center !py-3 text-sm"
         />

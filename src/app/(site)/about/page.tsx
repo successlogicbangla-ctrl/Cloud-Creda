@@ -3,6 +3,7 @@ import { ShieldCheck, Users, Zap, MessageCircle } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getSiteSettings } from "@/lib/data/settings";
+import { TELEGRAM_URL } from "@/lib/telegram";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -66,22 +67,20 @@ export default async function AboutPage() {
         ))}
       </div>
 
-      {settings.default_telegram_link && (
-        <div className="relative mx-auto mt-16 max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-primary-dark p-8 text-center text-white shadow-[var(--shadow-elevated)]">
-          <div className="bg-grid-pattern absolute inset-0 opacity-[0.12]" />
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{ background: "radial-gradient(400px circle at 50% 0%, rgba(6,182,212,0.22), transparent 60%)" }}
-          />
-          <h2 className="relative text-xl font-bold">Have questions before you order?</h2>
-          <p className="relative mt-2 text-white/70">
-            Message our team directly — we&apos;re happy to help you choose the right product.
-          </p>
-          <a href={settings.default_telegram_link} target="_blank" rel="noopener noreferrer" className="btn-primary relative mt-5">
-            <MessageCircle className="h-4 w-4" /> Chat on Telegram
-          </a>
-        </div>
-      )}
+      <div className="relative mx-auto mt-16 max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-primary-dark p-8 text-center text-white shadow-[var(--shadow-elevated)]">
+        <div className="bg-grid-pattern absolute inset-0 opacity-[0.12]" />
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "radial-gradient(400px circle at 50% 0%, rgba(6,182,212,0.22), transparent 60%)" }}
+        />
+        <h2 className="relative text-xl font-bold">Have questions before you order?</h2>
+        <p className="relative mt-2 text-white/70">
+          Message our team directly — we&apos;re happy to help you choose the right product.
+        </p>
+        <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary relative mt-5">
+          <MessageCircle className="h-4 w-4" /> Chat on Telegram
+        </a>
+      </div>
     </div>
   );
 }

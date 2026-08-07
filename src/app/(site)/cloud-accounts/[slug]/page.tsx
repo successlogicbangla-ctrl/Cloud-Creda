@@ -16,8 +16,8 @@ import { ProviderProductShowcase } from "@/components/site/ProviderProductShowca
 import { getProviderBySlug, getProviders } from "@/lib/data/providers";
 import { getProducts } from "@/lib/data/products";
 import { getFaqs } from "@/lib/data/faqs";
-import { getSiteSettings } from "@/lib/data/settings";
 import { getAllProviderLandingSlugs, getProviderLandingPage } from "@/lib/provider-landing-content";
+import { TELEGRAM_URL } from "@/lib/telegram";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -68,12 +68,10 @@ export default async function CloudAccountPage({ params }: PageProps) {
   const landingPage = getProviderLandingPage(slug);
   if (landingPage) {
     const isAwsLanding = landingPage.slug === "buy-aws-account";
-    const [settings, showcaseProducts, showcaseProvider] = await Promise.all([
-      getSiteSettings(),
+    const [showcaseProducts, showcaseProvider] = await Promise.all([
       getProducts({ providerSlug: landingPage.providerSlug }),
       isAwsLanding ? Promise.resolve(null) : getProviderBySlug(landingPage.providerSlug),
     ]);
-    const telegramLink = settings.default_telegram_link;
     const productsHref = `/products?provider=${landingPage.providerSlug}`;
 
     return (
@@ -99,11 +97,9 @@ export default async function CloudAccountPage({ params }: PageProps) {
           <h1 className="relative text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">{landingPage.h1}</h1>
           <p className="relative mx-auto mt-4 max-w-2xl text-lg text-white/70">{landingPage.heroSubtitle}</p>
           <div className="relative mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            {telegramLink && (
-              <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                <MessageCircle className="h-4 w-4" /> Chat on Telegram
-              </a>
-            )}
+            <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+              <MessageCircle className="h-4 w-4" /> Chat on Telegram
+            </a>
             <Link
               href={productsHref}
               className="btn-secondary !border-white/20 !bg-transparent !text-white hover:!border-sky-accent hover:!text-sky-accent"
@@ -113,13 +109,12 @@ export default async function CloudAccountPage({ params }: PageProps) {
           </div>
         </div>
 
-        {isAwsLanding && <AwsProductShowcase products={showcaseProducts} telegramLink={telegramLink} />}
+        {isAwsLanding && <AwsProductShowcase products={showcaseProducts} />}
         {!isAwsLanding && showcaseProvider && (
           <ProviderProductShowcase
             providerName={showcaseProvider.name}
             logoUrl={showcaseProvider.logo_url}
             products={showcaseProducts}
-            telegramLink={telegramLink}
           />
         )}
 
@@ -138,11 +133,9 @@ export default async function CloudAccountPage({ params }: PageProps) {
           />
           <p className="relative text-lg text-white/85">{landingPage.closingCta}</p>
           <div className="relative mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            {telegramLink && (
-              <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                <MessageCircle className="h-4 w-4" /> Chat on Telegram
-              </a>
-            )}
+            <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+              <MessageCircle className="h-4 w-4" /> Chat on Telegram
+            </a>
             <Link
               href={productsHref}
               className="btn-secondary !border-white/20 !bg-transparent !text-white hover:!border-sky-accent hover:!text-sky-accent"
@@ -162,10 +155,9 @@ export default async function CloudAccountPage({ params }: PageProps) {
   const hasRichContent = Object.keys(content).length > 0;
   const pageTitle = provider.display_title ?? provider.name;
 
-  const [products, allProviders, settings] = await Promise.all([
+  const [products, allProviders] = await Promise.all([
     getProducts({ providerSlug: provider.slug }),
     hasRichContent ? getProviders() : Promise.resolve([]),
-    getSiteSettings(),
   ]);
 
   const faqs = hasRichContent ? await getFaqs({ providerId: provider.id }) : [];
@@ -369,11 +361,9 @@ export default async function CloudAccountPage({ params }: PageProps) {
                 Browse the listings above, or message our team on Telegram if you have questions first.
               </p>
               <div className="relative flex flex-col gap-3 sm:flex-row">
-                {settings.default_telegram_link && (
-                  <a href={settings.default_telegram_link} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                    <MessageCircle className="h-4 w-4" /> Chat on Telegram
-                  </a>
-                )}
+                <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+                  <MessageCircle className="h-4 w-4" /> Chat on Telegram
+                </a>
                 <Link
                   href="/products"
                   className="btn-secondary !border-white/20 !bg-transparent !text-white hover:!border-sky-accent hover:!text-sky-accent"

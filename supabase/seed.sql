@@ -11,12 +11,14 @@
 -- SITE SETTINGS
 -- =========================================================
 
+-- default_telegram_link / social_links.telegram mirror the single
+-- TELEGRAM_URL constant in src/lib/telegram.ts — update both places together.
 update public.site_settings
 set
   site_name = 'CloudCreda',
-  default_telegram_link = 'https://t.me/your_channel',
+  default_telegram_link = 'https://t.me/CloudCredaSupport',
   support_email = 'support@cloudcreda.com',
-  social_links = '{"telegram": "https://t.me/your_channel"}'::jsonb,
+  social_links = '{"telegram": "https://t.me/CloudCredaSupport"}'::jsonb,
   default_seo = '{"title": "Cloud Accounts, Credits & Digital Services", "description": "A modern marketplace for cloud accounts, credits, and digital services across every major provider."}'::jsonb,
   privacy_policy = 'Add your privacy policy from /admin/settings.',
   terms_of_service = 'Add your terms of service from /admin/settings.',

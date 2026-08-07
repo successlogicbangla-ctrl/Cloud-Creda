@@ -20,6 +20,7 @@ import type { ArticleBlock, ComparisonContent, ScorecardRow } from "@/lib/compar
 import type { ComparisonEntry } from "@/lib/comparisons";
 import type { Product, Provider } from "@/lib/types";
 import { formatPrice, getProviderHref } from "@/lib/utils";
+import { TELEGRAM_URL } from "@/lib/telegram";
 
 interface ComparisonPageTemplateProps {
   content: ComparisonContent;
@@ -28,7 +29,6 @@ interface ComparisonPageTemplateProps {
   productsA: Product[];
   productsB: Product[];
   relatedComparisons: ComparisonEntry[];
-  telegramLink: string | null;
 }
 
 /** Renders `**bold**` spans as <strong> without altering any wording. */
@@ -284,11 +284,9 @@ function ProsConsCard({
 function RecommendationCard({
   provider,
   items,
-  telegramLink,
 }: {
   provider: Provider;
   items: string[];
-  telegramLink: string | null;
 }) {
   return (
     <div className="card-premium h-full">
@@ -307,19 +305,16 @@ function RecommendationCard({
           <Link href={getProviderHref(provider)} className="btn-primary flex-1 justify-center">
             View {provider.name} <ArrowRight className="h-4 w-4" />
           </Link>
-          {telegramLink && (
-            <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="btn-secondary justify-center">
-              <MessageCircle className="h-4 w-4" />
-            </a>
-          )}
+          <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary justify-center">
+            <MessageCircle className="h-4 w-4" />
+          </a>
         </div>
       </div>
     </div>
   );
 }
 
-function VariantCard({ product, provider, telegramLink }: { product: Product; provider: Provider; telegramLink: string | null }) {
-  const productTelegramLink = product.telegram_link || telegramLink || "https://t.me/";
+function VariantCard({ product, provider }: { product: Product; provider: Provider }) {
   return (
     <div className="card-surface card-surface-hover group flex flex-col p-5">
       <div className="flex items-center gap-3">
@@ -355,7 +350,7 @@ function VariantCard({ product, provider, telegramLink }: { product: Product; pr
         </Link>
       </div>
 
-      <BuyNowButton productId={product.id} telegramLink={productTelegramLink} label="Order Now" className="mt-3 w-full justify-center" />
+      <BuyNowButton productId={product.id} label="Order Now" className="mt-3 w-full justify-center" />
     </div>
   );
 }
@@ -367,7 +362,6 @@ export function ComparisonPageTemplate({
   productsA,
   productsB,
   relatedComparisons,
-  telegramLink,
 }: ComparisonPageTemplateProps) {
   return (
     <div className="container-page py-10">
@@ -491,8 +485,8 @@ export function ComparisonPageTemplate({
           <h2 className="mt-2 text-2xl font-bold tracking-tight text-ink sm:text-3xl">Which Should You Choose?</h2>
         </div>
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <RecommendationCard provider={providerA} items={content.recommendationA} telegramLink={telegramLink} />
-          <RecommendationCard provider={providerB} items={content.recommendationB} telegramLink={telegramLink} />
+          <RecommendationCard provider={providerA} items={content.recommendationA} />
+          <RecommendationCard provider={providerB} items={content.recommendationB} />
         </div>
       </section>
 
@@ -513,7 +507,7 @@ export function ComparisonPageTemplate({
             </div>
             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
               {productsA.map((product) => (
-                <VariantCard key={product.id} product={product} provider={providerA} telegramLink={telegramLink} />
+                <VariantCard key={product.id} product={product} provider={providerA} />
               ))}
             </div>
           </div>
@@ -524,7 +518,7 @@ export function ComparisonPageTemplate({
             </div>
             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
               {productsB.map((product) => (
-                <VariantCard key={product.id} product={product} provider={providerB} telegramLink={telegramLink} />
+                <VariantCard key={product.id} product={product} provider={providerB} />
               ))}
             </div>
           </div>
@@ -565,16 +559,12 @@ export function ComparisonPageTemplate({
           Message our team on Telegram or browse {providerA.name} and {providerB.name} listings directly.
         </p>
         <div className="relative mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          {telegramLink && (
-            <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="btn-primary">
-              <MessageCircle className="h-4 w-4" /> Order {providerA.name}
-            </a>
-          )}
-          {telegramLink && (
-            <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="btn-primary">
-              <MessageCircle className="h-4 w-4" /> Order {providerB.name}
-            </a>
-          )}
+          <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+            <MessageCircle className="h-4 w-4" /> Order {providerA.name}
+          </a>
+          <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+            <MessageCircle className="h-4 w-4" /> Order {providerB.name}
+          </a>
           <Link
             href="/compare"
             className="btn-secondary !border-white/20 !bg-transparent !text-white hover:!border-sky-accent hover:!text-sky-accent"

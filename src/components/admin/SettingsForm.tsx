@@ -41,7 +41,7 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
             label="Default Telegram Link"
             name="default_telegram_link"
             defaultValue={settings.default_telegram_link ?? ""}
-            placeholder="https://t.me/your_channel"
+            placeholder="https://t.me/CloudCredaSupport"
           />
           <Field label="Support Email" name="support_email" defaultValue={settings.support_email ?? ""} />
         </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Cloud, MessageCircle, Mail, ArrowUpRight } from "lucide-react";
 import type { SiteSettings } from "@/lib/types";
+import { TELEGRAM_URL } from "@/lib/telegram";
 
 const columns: { title: string; links: { label: string; href: string }[] }[] = [
   {
@@ -63,17 +64,15 @@ export function Footer({ settings }: { settings: SiteSettings }) {
               directly with our team on Telegram.
             </p>
             <div className="mt-5 flex flex-col gap-2.5 text-sm">
-              {settings.default_telegram_link && (
-                <a
-                  href={settings.default_telegram_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex w-fit items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white/80 transition-colors hover:border-sky-accent/40 hover:bg-white/10 hover:text-sky-accent"
-                >
-                  <MessageCircle className="h-4 w-4" /> Chat on Telegram
-                  <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
-                </a>
-              )}
+              <a
+                href={TELEGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex w-fit items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white/80 transition-colors hover:border-sky-accent/40 hover:bg-white/10 hover:text-sky-accent"
+              >
+                <MessageCircle className="h-4 w-4" /> Chat on Telegram
+                <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
+              </a>
               {settings.support_email && (
                 <a
                   href={`mailto:${settings.support_email}`}

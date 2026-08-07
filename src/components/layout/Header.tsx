@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Cloud, Menu, MessageCircle, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TELEGRAM_URL } from "@/lib/telegram";
 import { SearchBox } from "./SearchBox";
 
 const navItems = [
@@ -14,7 +15,7 @@ const navItems = [
   { label: "Contact", href: "/contact" },
 ];
 
-export function Header({ siteName, telegramLink }: { siteName: string; telegramLink?: string | null }) {
+export function Header({ siteName }: { siteName: string }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -67,11 +68,9 @@ export function Header({ siteName, telegramLink }: { siteName: string; telegramL
           >
             <Search className="h-5 w-5" />
           </button>
-          {telegramLink && (
-            <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="btn-primary hidden sm:inline-flex">
-              <MessageCircle className="h-4 w-4" /> Chat on Telegram
-            </a>
-          )}
+          <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary hidden sm:inline-flex">
+            <MessageCircle className="h-4 w-4" /> Chat on Telegram
+          </a>
           <button
             type="button"
             onClick={() => setMobileOpen((v) => !v)}
@@ -103,19 +102,17 @@ export function Header({ siteName, telegramLink }: { siteName: string; telegramL
                 </Link>
               </li>
             ))}
-            {telegramLink && (
-              <li className="mt-2">
-                <a
-                  href={telegramLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary w-full"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <MessageCircle className="h-4 w-4" /> Chat on Telegram
-                </a>
-              </li>
-            )}
+            <li className="mt-2">
+              <a
+                href={TELEGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary w-full"
+                onClick={() => setMobileOpen(false)}
+              >
+                <MessageCircle className="h-4 w-4" /> Chat on Telegram
+              </a>
+            </li>
           </ul>
         </nav>
       )}

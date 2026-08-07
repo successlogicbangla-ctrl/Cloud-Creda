@@ -3,10 +3,10 @@
 import { MessageCircle } from "lucide-react";
 import { createLead } from "@/lib/actions/leads";
 import { cn } from "@/lib/utils";
+import { TELEGRAM_URL } from "@/lib/telegram";
 
 interface BuyNowButtonProps {
   productId: string;
-  telegramLink: string;
   label?: string;
   className?: string;
   size?: "md" | "lg";
@@ -14,7 +14,6 @@ interface BuyNowButtonProps {
 
 export function BuyNowButton({
   productId,
-  telegramLink,
   label = "Buy Now on Telegram",
   className,
   size = "md",
@@ -29,7 +28,7 @@ export function BuyNowButton({
 
   return (
     <a
-      href={telegramLink}
+      href={TELEGRAM_URL}
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}

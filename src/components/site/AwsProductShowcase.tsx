@@ -20,7 +20,7 @@ const iconTileVariants = ["icon-tile-a", "icon-tile-b", "icon-tile-c", "icon-til
  * comes from the live product catalog (via `products`), so it can never drift
  * from what the linked product page and Telegram order flow actually charge.
  */
-export function AwsProductShowcase({ products, telegramLink }: { products: Product[]; telegramLink: string | null }) {
+export function AwsProductShowcase({ products }: { products: Product[] }) {
   const bySlug = new Map(products.map((p) => [p.slug, p]));
   const prices = products.map((p) => p.price);
   const startingPrice = prices.length > 0 ? Math.min(...prices) : null;
@@ -96,7 +96,7 @@ export function AwsProductShowcase({ products, telegramLink }: { products: Produ
             <h2 className="text-gradient-premium text-2xl font-bold tracking-tight sm:text-3xl">{tier.heading}</h2>
             <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((product) => (
-                <AwsVariantCard key={product.id} product={product} tierId={tier.id} telegramLink={telegramLink} />
+                <AwsVariantCard key={product.id} product={product} tierId={tier.id} />
               ))}
             </div>
           </section>
@@ -106,17 +106,8 @@ export function AwsProductShowcase({ products, telegramLink }: { products: Produ
   );
 }
 
-function AwsVariantCard({
-  product,
-  tierId,
-  telegramLink,
-}: {
-  product: Product;
-  tierId: string;
-  telegramLink: string | null;
-}) {
+function AwsVariantCard({ product, tierId }: { product: Product; tierId: string }) {
   const badges = deriveAwsBadges(product.title, tierId);
-  const productTelegramLink = product.telegram_link || telegramLink || "https://t.me/";
 
   return (
     <div className="card-premium h-full transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-glow-blue)]">
@@ -141,7 +132,6 @@ function AwsVariantCard({
           <span className="text-2xl font-bold text-white">{formatPrice(product.price, product.currency)}</span>
           <BuyNowButton
             productId={product.id}
-            telegramLink={productTelegramLink}
             label="Order Now"
             className="!py-2.5 text-sm"
           />

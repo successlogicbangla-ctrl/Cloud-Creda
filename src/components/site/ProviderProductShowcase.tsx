@@ -30,12 +30,10 @@ export function ProviderProductShowcase({
   providerName,
   logoUrl,
   products,
-  telegramLink,
 }: {
   providerName: string;
   logoUrl: string | null;
   products: Product[];
-  telegramLink: string | null;
 }) {
   const prices = products.map((p) => p.price);
   const startingPrice = prices.length > 0 ? Math.min(...prices) : null;
@@ -113,7 +111,6 @@ export function ProviderProductShowcase({
                 product={product}
                 providerName={providerName}
                 logoUrl={logoUrl}
-                telegramLink={telegramLink}
               />
             ))}
           </div>
@@ -127,15 +124,12 @@ function ProviderVariantCard({
   product,
   providerName,
   logoUrl,
-  telegramLink,
 }: {
   product: Product;
   providerName: string;
   logoUrl: string | null;
-  telegramLink: string | null;
 }) {
   const badges = deriveShowcaseBadges(product.title);
-  const productTelegramLink = product.telegram_link || telegramLink || "https://t.me/";
 
   return (
     <div className="card-premium h-full transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-glow-blue)]">
@@ -166,7 +160,6 @@ function ProviderVariantCard({
           <span className="text-2xl font-bold text-white">{formatPrice(product.price, product.currency)}</span>
           <BuyNowButton
             productId={product.id}
-            telegramLink={productTelegramLink}
             label="Order Now"
             className="!py-2.5 text-sm"
           />

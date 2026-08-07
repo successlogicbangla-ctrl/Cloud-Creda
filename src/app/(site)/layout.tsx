@@ -7,7 +7,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   return (
     <>
-      <Header siteName={settings.site_name} telegramLink={settings.default_telegram_link} />
+      <Header siteName={settings.site_name} />
       <main className="flex-1">{children}</main>
       <Footer settings={settings} />
     </>

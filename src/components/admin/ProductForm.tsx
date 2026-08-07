@@ -110,7 +110,7 @@ export function ProductForm({ product, categories, providers, action }: ProductF
           label="Telegram Link (overrides site default)"
           name="telegram_link"
           defaultValue={product?.telegram_link ?? ""}
-          placeholder="https://t.me/your_channel"
+          placeholder="https://t.me/CloudCredaSupport"
         />
       </section>
 

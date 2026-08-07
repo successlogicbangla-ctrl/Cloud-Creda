@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
+
+// Google Analytics 4 measurement ID — loaded globally below via next/script
+// (official Next.js App Router pattern) so every page reports page views.
+const GA_MEASUREMENT_ID = "G-2H1XL5WFEP";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +42,21 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-surface text-ink">{children}</body>
+      <body className="min-h-full flex flex-col bg-surface text-ink">
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
+        {children}
+      </body>
     </html>
   );
 }

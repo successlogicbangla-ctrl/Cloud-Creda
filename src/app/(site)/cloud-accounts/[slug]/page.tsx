@@ -12,6 +12,7 @@ import { ProviderCard } from "@/components/site/ProviderCard";
 import { FaqAccordion } from "@/components/site/FaqAccordion";
 import { ProviderLandingSection } from "@/components/site/ProviderLandingSections";
 import { AwsProductShowcase } from "@/components/site/AwsProductShowcase";
+import { ProviderProductShowcase } from "@/components/site/ProviderProductShowcase";
 import { getProviderBySlug, getProviders } from "@/lib/data/providers";
 import { getProducts } from "@/lib/data/products";
 import { getFaqs } from "@/lib/data/faqs";
@@ -67,9 +68,10 @@ export default async function CloudAccountPage({ params }: PageProps) {
   const landingPage = getProviderLandingPage(slug);
   if (landingPage) {
     const isAwsLanding = landingPage.slug === "buy-aws-account";
-    const [settings, awsProducts] = await Promise.all([
+    const [settings, showcaseProducts, showcaseProvider] = await Promise.all([
       getSiteSettings(),
-      isAwsLanding ? getProducts({ providerSlug: landingPage.providerSlug }) : Promise.resolve([]),
+      getProducts({ providerSlug: landingPage.providerSlug }),
+      isAwsLanding ? Promise.resolve(null) : getProviderBySlug(landingPage.providerSlug),
     ]);
     const telegramLink = settings.default_telegram_link;
     const productsHref = `/products?provider=${landingPage.providerSlug}`;
@@ -111,7 +113,15 @@ export default async function CloudAccountPage({ params }: PageProps) {
           </div>
         </div>
 
-        {isAwsLanding && <AwsProductShowcase products={awsProducts} />}
+        {isAwsLanding && <AwsProductShowcase products={showcaseProducts} telegramLink={telegramLink} />}
+        {!isAwsLanding && showcaseProvider && (
+          <ProviderProductShowcase
+            providerName={showcaseProvider.name}
+            logoUrl={showcaseProvider.logo_url}
+            products={showcaseProducts}
+            telegramLink={telegramLink}
+          />
+        )}
 
         <div className="mx-auto max-w-3xl">
           {landingPage.sections.map((section) => (

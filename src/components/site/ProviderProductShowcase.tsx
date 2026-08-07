@@ -1,8 +1,14 @@
-import { ShieldCheck, DollarSign, Clock, Globe2, Unlock, Headset, Tag, BadgeCheck, Award } from "lucide-react";
+import { Cloud, ShieldCheck, DollarSign, Clock, Globe2, Unlock, Headset, Tag, BadgeCheck, Award } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
 import { BuyNowButton } from "@/components/site/BuyNowButton";
-import { awsVariantTiers, awsProductInfo, awsWhyChoose, deriveAwsBadges, type BadgeTone } from "@/lib/aws-product-showcase";
+import {
+  buildShowcaseTiers,
+  showcaseProductInfo,
+  showcaseWhyChoose,
+  deriveShowcaseBadges,
+  type BadgeTone,
+} from "@/lib/provider-product-showcase";
 
 const badgeToneClass: Record<BadgeTone, string> = {
   info: "badge-info",
@@ -15,16 +21,26 @@ const whyChooseIcons = [Headset, Tag, BadgeCheck, Award];
 const iconTileVariants = ["icon-tile-a", "icon-tile-b", "icon-tile-c", "icon-tile-d"];
 
 /**
- * AWS-only premium showcase rendered between the Hero and the existing SEO
- * article content on /cloud-accounts/buy-aws-account. Every price shown here
- * comes from the live product catalog (via `products`), so it can never drift
- * from what the linked product page and Telegram order flow actually charge.
+ * Same premium Product Information / Why Choose This Product / Product
+ * Variants design introduced on the AWS landing page, reused for every other
+ * /cloud-accounts/{slug} provider so the whole section shares one consistent
+ * look — only the provider's own name, logo, and real products change.
  */
-export function AwsProductShowcase({ products, telegramLink }: { products: Product[]; telegramLink: string | null }) {
-  const bySlug = new Map(products.map((p) => [p.slug, p]));
+export function ProviderProductShowcase({
+  providerName,
+  logoUrl,
+  products,
+  telegramLink,
+}: {
+  providerName: string;
+  logoUrl: string | null;
+  products: Product[];
+  telegramLink: string | null;
+}) {
   const prices = products.map((p) => p.price);
   const startingPrice = prices.length > 0 ? Math.min(...prices) : null;
   const currency = products[0]?.currency ?? "USD";
+  const tiers = buildShowcaseTiers(providerName, products);
 
   const infoItems = [
     { icon: ShieldCheck, title: "Trusted Product", value: "Verified" },
@@ -33,9 +49,9 @@ export function AwsProductShowcase({ products, telegramLink }: { products: Produ
       title: "Price",
       value: startingPrice !== null ? `From ${formatPrice(startingPrice, currency)}` : "Multiple Options",
     },
-    { icon: Clock, title: "Delivery Time", value: awsProductInfo.deliveryTime },
-    { icon: Globe2, title: "Region", value: awsProductInfo.region },
-    { icon: Unlock, title: "Full Access", value: awsProductInfo.fullAccess },
+    { icon: Clock, title: "Delivery Time", value: showcaseProductInfo.deliveryTime },
+    { icon: Globe2, title: "Region", value: showcaseProductInfo.region },
+    { icon: Unlock, title: "Full Access", value: showcaseProductInfo.fullAccess },
   ];
 
   return (
@@ -66,7 +82,7 @@ export function AwsProductShowcase({ products, telegramLink }: { products: Produ
             <div className="bg-grid-pattern absolute inset-0 opacity-[0.08]" />
             <h2 className="relative text-xl font-bold text-white">Why Choose This Product</h2>
             <div className="relative mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {awsWhyChoose.map((item, i) => {
+              {showcaseWhyChoose.map((item, i) => {
                 const Icon = whyChooseIcons[i % whyChooseIcons.length];
                 return (
                   <div
@@ -87,45 +103,54 @@ export function AwsProductShowcase({ products, telegramLink }: { products: Produ
       </section>
 
       {/* Product Variants */}
-      {awsVariantTiers.map((tier) => {
-        const items = tier.slugs.map((slug) => bySlug.get(slug)).filter((p): p is Product => Boolean(p));
-        if (items.length === 0) return null;
-
-        return (
-          <section key={tier.id} className="mt-14">
-            <h2 className="text-gradient-premium text-2xl font-bold tracking-tight sm:text-3xl">{tier.heading}</h2>
-            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((product) => (
-                <AwsVariantCard key={product.id} product={product} tierId={tier.id} telegramLink={telegramLink} />
-              ))}
-            </div>
-          </section>
-        );
-      })}
+      {tiers.map((tier) => (
+        <section key={tier.id} className="mt-14">
+          <h2 className="text-gradient-premium text-2xl font-bold tracking-tight sm:text-3xl">{tier.heading}</h2>
+          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {tier.products.map((product) => (
+              <ProviderVariantCard
+                key={product.id}
+                product={product}
+                providerName={providerName}
+                logoUrl={logoUrl}
+                telegramLink={telegramLink}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
     </>
   );
 }
 
-function AwsVariantCard({
+function ProviderVariantCard({
   product,
-  tierId,
+  providerName,
+  logoUrl,
   telegramLink,
 }: {
   product: Product;
-  tierId: string;
+  providerName: string;
+  logoUrl: string | null;
   telegramLink: string | null;
 }) {
-  const badges = deriveAwsBadges(product.title, tierId);
+  const badges = deriveShowcaseBadges(product.title);
   const productTelegramLink = product.telegram_link || telegramLink || "https://t.me/";
 
   return (
     <div className="card-premium h-full transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-glow-blue)]">
       <div className="card-premium-inner flex h-full flex-col p-6">
         <div className="flex items-center gap-3">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white p-2 shadow-[0_8px_20px_-6px_rgb(0_0_0_/_0.4)] ring-1 ring-white/20">
-            {/* eslint-disable-next-line @next/next/no-img-element -- self-hosted brand SVG, not a user-supplied remote image */}
-            <img src="/logos/aws.svg" alt="AWS logo" className="h-full w-full object-contain" loading="lazy" />
-          </span>
+          {logoUrl ? (
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white p-2 shadow-[0_8px_20px_-6px_rgb(0_0_0_/_0.4)] ring-1 ring-white/20">
+              {/* eslint-disable-next-line @next/next/no-img-element -- self-hosted brand SVG, not a user-supplied remote image */}
+              <img src={logoUrl} alt={`${providerName} logo`} className="h-full w-full object-contain" loading="lazy" />
+            </span>
+          ) : (
+            <span className="icon-tile icon-tile-a h-12 w-12 shrink-0">
+              <Cloud className="h-5 w-5" />
+            </span>
+          )}
           <h3 className="font-semibold leading-snug text-white">{product.title}</h3>
         </div>
 

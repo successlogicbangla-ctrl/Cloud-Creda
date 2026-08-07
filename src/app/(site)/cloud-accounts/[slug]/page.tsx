@@ -11,6 +11,7 @@ import { ProductCard } from "@/components/site/ProductCard";
 import { ProviderCard } from "@/components/site/ProviderCard";
 import { FaqAccordion } from "@/components/site/FaqAccordion";
 import { ProviderLandingSection } from "@/components/site/ProviderLandingSections";
+import { AwsProductShowcase } from "@/components/site/AwsProductShowcase";
 import { getProviderBySlug, getProviders } from "@/lib/data/providers";
 import { getProducts } from "@/lib/data/products";
 import { getFaqs } from "@/lib/data/faqs";
@@ -65,7 +66,11 @@ export default async function CloudAccountPage({ params }: PageProps) {
 
   const landingPage = getProviderLandingPage(slug);
   if (landingPage) {
-    const settings = await getSiteSettings();
+    const isAwsLanding = landingPage.slug === "buy-aws-account";
+    const [settings, awsProducts] = await Promise.all([
+      getSiteSettings(),
+      isAwsLanding ? getProducts({ providerSlug: landingPage.providerSlug }) : Promise.resolve([]),
+    ]);
     const telegramLink = settings.default_telegram_link;
     const productsHref = `/products?provider=${landingPage.providerSlug}`;
 
@@ -105,6 +110,8 @@ export default async function CloudAccountPage({ params }: PageProps) {
             </Link>
           </div>
         </div>
+
+        {isAwsLanding && <AwsProductShowcase products={awsProducts} />}
 
         <div className="mx-auto max-w-3xl">
           {landingPage.sections.map((section) => (

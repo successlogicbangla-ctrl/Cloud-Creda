@@ -94,18 +94,18 @@ insert into public.categories (slug, name, description, icon, sort_order, seo_ti
 
 insert into public.products (slug, title, provider_id, category_id, price, sort_order) values
 -- Amazon Web Services
-('aws-account-free-trial', 'AWS Account — Free Trial', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 10, 1),
-('aws-account-8-vcpu', 'AWS Account — 8 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 15, 2),
-('aws-account-32-vcpu', 'AWS Account — 32 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 30, 3),
-('aws-account-64-vcpu', 'AWS Account — 64 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 50, 4),
-('aws-account-128-vcpu', 'AWS Account — 128 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 90, 5),
-('aws-account-256-vcpu', 'AWS Account — 256 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 160, 6),
-('aws-account-512-vcpu', 'AWS Account — 512 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 350, 7),
-('aws-account-1k-credit', 'AWS Account — $1K Credit', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-credits'), 180, 8),
-('aws-account-5k-credit', 'AWS Account — $5K Credit', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-credits'), 750, 9),
+('aws-account-free-trial', 'AWS Account — Free Trial', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 15, 1),
+('aws-account-8-vcpu', 'AWS Account — 8 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 20, 2),
+('aws-account-32-vcpu', 'AWS Account — 32 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 35, 3),
+('aws-account-64-vcpu', 'AWS Account — 64 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 60, 4),
+('aws-account-128-vcpu', 'AWS Account — 128 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 100, 5),
+('aws-account-256-vcpu', 'AWS Account — 256 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 199, 6),
+('aws-account-512-vcpu', 'AWS Account — 512 vCPU', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 299, 7),
+('aws-account-1k-credit', 'AWS Account — $1K Credit', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-credits'), 250, 8),
+('aws-account-5k-credit', 'AWS Account — $5K Credit', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-credits'), 850, 9),
 ('aws-account-10k-credit', 'AWS Account — $10K Credit', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-credits'), 1600, 10),
-('aws-account-25k-credit', 'AWS Account — $25K Credit', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-credits'), 4500, 11),
-('aws-account-100k-credit', 'AWS Account — $100K Credit', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-credits'), 9500, 12),
+('aws-account-25k-credit', 'AWS Account — $25K Credit', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-credits'), 3500, 11),
+('aws-account-100k-credit', 'AWS Account — $100K Credit', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-credits'), 9999, 12),
 
 -- Google Cloud Platform
 ('google-cloud-account-300-credit', 'Google Cloud Account — $300 Credit', (select id from public.providers where slug = 'google-cloud'), (select id from public.categories where slug = 'cloud-credits'), 40, 13),
@@ -166,7 +166,16 @@ insert into public.products (slug, title, provider_id, category_id, price, sort_
 
 -- Atlantic.Net
 ('atlantic-net-account-free-trial', 'Atlantic.Net Account — Free Trial', (select id from public.providers where slug = 'atlantic-net'), (select id from public.categories where slug = 'cloud-accounts'), 55, 50),
-('atlantic-net-account-port-25-open', 'Atlantic.Net Account — Port 25 Open', (select id from public.providers where slug = 'atlantic-net'), (select id from public.categories where slug = 'cloud-accounts'), 250, 51);
+('atlantic-net-account-port-25-open', 'Atlantic.Net Account — Port 25 Open', (select id from public.providers where slug = 'atlantic-net'), (select id from public.categories where slug = 'cloud-accounts'), 250, 51),
+
+-- Amazon Web Services — AI Accounts (curated variants for the /cloud-accounts/buy-aws-account catalog)
+('aws-account-ai-10rpm-32vcpu-nvirginia', 'AWS Account — 10 RPM | 32 vCPU | Gmail | N. Virginia | 2FA + API', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 70, 52),
+('aws-account-ai-50rpm-kiro-32vcpu', 'AWS Account — 50 RPM | Kiro Working | 32 vCPU | Gmail | 2FA + API', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 220, 53),
+('aws-account-ai-10krpm-5vcpu-aged', 'AWS Account — 10K RPM | 4.6 Support | 5 vCPU | Multi-Year Aged', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 220, 54),
+('aws-account-ai-10krpm-96vcpu-aged', 'AWS Account — 10K RPM | 4.6 Support | 96 vCPU | Multi-Year Aged', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 350, 55),
+('aws-account-ai-10krpm-128vcpu-aged', 'AWS Account — 10K RPM | 4.6 Support | 128 vCPU | Multi-Year Aged', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 850, 56),
+('aws-account-ai-10krpm-256vcpu-aged', 'AWS Account — 10K RPM | 4.6 Support | 256 vCPU | Multi-Year Aged', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 900, 57),
+('aws-account-ai-cloud-platform-384vcpu', 'AWS Account — Cloud Platform Working | 384 vCPU | Bedrock Not Included', (select id from public.providers where slug = 'aws'), (select id from public.categories where slug = 'cloud-accounts'), 4500, 58);
 
 -- Spotlight one entry-level product per major provider on the homepage.
 -- Change anytime from /admin/products.

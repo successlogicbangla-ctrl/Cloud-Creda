@@ -108,7 +108,11 @@ export const mockProviders: Provider[] = [
     slug: "vultr",
     name: "Vultr",
     display_title: "Buy Vultr Cloud Account",
-    landing_path: "buy-vultr-cloud-account",
+    // The dedicated /cloud-accounts/buy-vultr-cloud-account landing page was
+    // removed; Vultr now falls through to the generic /cloud-accounts/vultr
+    // template (see getProviderHref in lib/utils.ts). The provider and its
+    // real products are unaffected.
+    landing_path: null,
     logo_url: "/logos/vultr.svg",
     tagline: "Global cloud compute infrastructure",
     description: "Global cloud compute infrastructure with predictable, transparent pricing.",

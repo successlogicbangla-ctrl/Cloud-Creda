@@ -31,8 +31,10 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // Vultr's dedicated landing page was removed; send old links to the
+        // generic provider page instead of chaining into a 404.
         source: "/providers/vultr",
-        destination: "/cloud-accounts/buy-vultr-cloud-account",
+        destination: "/cloud-accounts/vultr",
         permanent: true,
       },
       {

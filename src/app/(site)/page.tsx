@@ -30,6 +30,7 @@ import { getSiteSettings } from "@/lib/data/settings";
 import { homeContent } from "@/lib/home-content";
 import { getProviderHref } from "@/lib/utils";
 import { TELEGRAM_URL } from "@/lib/telegram";
+import { DELISTED_PROVIDER_SLUGS } from "@/lib/delisted-providers";
 
 const whyChooseIcons: LucideIcon[] = [ShieldCheck, Zap, MessageCircle, Tags, RefreshCcw, Lock];
 const howItWorksIcons: LucideIcon[] = [Compass, ShoppingCart, CreditCard, Mail, Rocket];
@@ -207,7 +208,7 @@ export default async function HomePage() {
                       </p>
                     ))}
                   </div>
-                  {provider && (
+                  {provider && !DELISTED_PROVIDER_SLUGS.has(provider.slug) && (
                     <Link href={getProviderHref(provider)} className="btn-secondary mt-5 w-full justify-center !py-2.5 text-xs">
                       View Products <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                     </Link>

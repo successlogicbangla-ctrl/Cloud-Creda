@@ -10,6 +10,7 @@ import { getProviderBySlug } from "@/lib/data/providers";
 import { getProducts } from "@/lib/data/products";
 import { formatPrice, getProviderHref } from "@/lib/utils";
 import { TELEGRAM_URL } from "@/lib/telegram";
+import { DELISTED_PROVIDER_SLUGS } from "@/lib/delisted-providers";
 import type { Provider, Product } from "@/lib/types";
 
 interface PageProps {
@@ -85,9 +86,11 @@ function FallbackProviderColumn({ provider, products }: { provider: Provider; pr
       )}
 
       <div className="mt-6 flex flex-col gap-2.5 pt-1 sm:flex-row">
-        <Link href={getProviderHref(provider)} className="btn-primary flex-1 justify-center">
-          View {provider.name} <ArrowRight className="h-4 w-4" />
-        </Link>
+        {!DELISTED_PROVIDER_SLUGS.has(provider.slug) && (
+          <Link href={getProviderHref(provider)} className="btn-primary flex-1 justify-center">
+            View {provider.name} <ArrowRight className="h-4 w-4" />
+          </Link>
+        )}
         {provider.website_url && (
           <a
             href={provider.website_url}

@@ -31,10 +31,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        // Vultr's dedicated landing page was removed; send old links to the
-        // generic provider page instead of chaining into a 404.
+        // Vultr's landing page, generic page, and entire product catalog
+        // were all permanently discontinued (see delisted-providers.ts) —
+        // send old links to the general directory instead of a dead page.
         source: "/providers/vultr",
-        destination: "/cloud-accounts/vultr",
+        destination: "/cloud-accounts",
         permanent: true,
       },
       {

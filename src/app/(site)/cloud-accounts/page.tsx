@@ -3,6 +3,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ProviderCard } from "@/components/site/ProviderCard";
 import { getProviders } from "@/lib/data/providers";
 import { getProducts } from "@/lib/data/products";
+import { DELISTED_PROVIDER_SLUGS } from "@/lib/delisted-providers";
 
 export const metadata: Metadata = {
   title: "Cloud Accounts",
@@ -11,7 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default async function CloudAccountsPage() {
-  const providers = await getProviders();
+  const allProviders = await getProviders();
+  const providers = allProviders.filter((p) => !DELISTED_PROVIDER_SLUGS.has(p.slug));
   const counts = await Promise.all(providers.map((p) => getProducts({ providerSlug: p.slug })));
 
   return (

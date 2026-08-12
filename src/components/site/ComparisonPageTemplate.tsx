@@ -21,6 +21,7 @@ import type { ComparisonEntry } from "@/lib/comparisons";
 import type { Product, Provider } from "@/lib/types";
 import { formatPrice, getProviderHref } from "@/lib/utils";
 import { TELEGRAM_URL } from "@/lib/telegram";
+import { DELISTED_PROVIDER_SLUGS } from "@/lib/delisted-providers";
 
 interface ComparisonPageTemplateProps {
   content: ComparisonContent;
@@ -302,9 +303,11 @@ function RecommendationCard({
           ))}
         </ul>
         <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
-          <Link href={getProviderHref(provider)} className="btn-primary flex-1 justify-center">
-            View {provider.name} <ArrowRight className="h-4 w-4" />
-          </Link>
+          {!DELISTED_PROVIDER_SLUGS.has(provider.slug) && (
+            <Link href={getProviderHref(provider)} className="btn-primary flex-1 justify-center">
+              View {provider.name} <ArrowRight className="h-4 w-4" />
+            </Link>
+          )}
           <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary justify-center">
             <MessageCircle className="h-4 w-4" />
           </a>

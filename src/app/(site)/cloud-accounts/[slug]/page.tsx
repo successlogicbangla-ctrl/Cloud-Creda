@@ -18,6 +18,7 @@ import { getProducts } from "@/lib/data/products";
 import { getFaqs } from "@/lib/data/faqs";
 import { getAllProviderLandingSlugs, getProviderLandingPage } from "@/lib/provider-landing-content";
 import { TELEGRAM_URL } from "@/lib/telegram";
+import { DELISTED_PROVIDER_SLUGS } from "@/lib/delisted-providers";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -36,13 +37,18 @@ export async function generateStaticParams() {
   ]);
   // Providers with a dedicated landing page are served by that content below;
   // providers without one fall through to the generic detail view — both
-  // live at this same /cloud-accounts/{slug} route.
-  const genericSlugs = providers.filter((p) => !p.landing_path).map((p) => p.slug);
+  // live at this same /cloud-accounts/{slug} route. Delisted providers are
+  // never prerendered here, so this exact slug 404s.
+  const genericSlugs = providers
+    .filter((p) => !p.landing_path && !DELISTED_PROVIDER_SLUGS.has(p.slug))
+    .map((p) => p.slug);
   return [...landingSlugs, ...genericSlugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+
+  if (DELISTED_PROVIDER_SLUGS.has(slug)) return {};
 
   const landingPage = getProviderLandingPage(slug);
   if (landingPage) {
@@ -64,6 +70,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CloudAccountPage({ params }: PageProps) {
   const { slug } = await params;
+
+  if (DELISTED_PROVIDER_SLUGS.has(slug)) notFound();
 
   const landingPage = getProviderLandingPage(slug);
   if (landingPage) {
@@ -161,7 +169,9 @@ export default async function CloudAccountPage({ params }: PageProps) {
   ]);
 
   const faqs = hasRichContent ? await getFaqs({ providerId: provider.id }) : [];
-  const alternativeProviders = allProviders.filter((p) => p.id !== provider.id);
+  const alternativeProviders = allProviders.filter(
+    (p) => p.id !== provider.id && !DELISTED_PROVIDER_SLUGS.has(p.slug)
+  );
 
   let relatedProducts: typeof products = [];
   if (hasRichContent) {

@@ -6,6 +6,7 @@ import { ProductFilters } from "@/components/site/ProductFilters";
 import { getCategories } from "@/lib/data/categories";
 import { getProviders } from "@/lib/data/providers";
 import { getProducts, type ProductFilters as ProductFiltersType } from "@/lib/data/products";
+import { DELISTED_PROVIDER_SLUGS } from "@/lib/delisted-providers";
 
 export const metadata: Metadata = {
   title: "All Products",
@@ -27,11 +28,12 @@ export default async function ProductsPage({ searchParams }: PageProps) {
     sort: (params.sort as ProductFiltersType["sort"]) ?? "featured",
   };
 
-  const [products, categories, providers] = await Promise.all([
+  const [products, categories, allProviders] = await Promise.all([
     getProducts(filters),
     getCategories(),
     getProviders(),
   ]);
+  const providers = allProviders.filter((p) => !DELISTED_PROVIDER_SLUGS.has(p.slug));
 
   return (
     <div className="container-page py-10">

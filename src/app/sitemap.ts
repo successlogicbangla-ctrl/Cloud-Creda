@@ -5,6 +5,7 @@ import { getProviders } from "@/lib/data/providers";
 import { getArticles } from "@/lib/data/articles";
 import { getProviderHref } from "@/lib/utils";
 import { comparisons } from "@/lib/comparisons";
+import { DELISTED_PROVIDER_SLUGS } from "@/lib/delisted-providers";
 
 // Production domain — never localhost, even if NEXT_PUBLIC_SITE_URL isn't set
 // in the deploy environment. Override via NEXT_PUBLIC_SITE_URL only for a
@@ -55,11 +56,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  const providerEntries: MetadataRoute.Sitemap = providers.map((p) => ({
-    url: `${siteUrl}${getProviderHref(p)}`,
-    changeFrequency: "weekly",
-    priority: p.landing_path ? 0.8 : 0.6,
-  }));
+  const providerEntries: MetadataRoute.Sitemap = providers
+    .filter((p) => !DELISTED_PROVIDER_SLUGS.has(p.slug))
+    .map((p) => ({
+      url: `${siteUrl}${getProviderHref(p)}`,
+      changeFrequency: "weekly",
+      priority: p.landing_path ? 0.8 : 0.6,
+    }));
 
   const articleEntries: MetadataRoute.Sitemap = articles.map((a) => ({
     url: `${siteUrl}/articles/${a.slug}`,

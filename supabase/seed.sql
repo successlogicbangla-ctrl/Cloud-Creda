@@ -72,9 +72,17 @@ insert into public.providers (slug, name, display_title, landing_path, logo_url,
 -- The dedicated /cloud-accounts/buy-vultr-cloud-account landing page was
 -- removed. This UPDATE re-applies that to a database that was already
 -- seeded before this change (the INSERT above only affects a fresh seed).
--- Vultr the provider and its real products are untouched — it now falls
--- through to the generic /cloud-accounts/vultr page instead of 404ing.
 update public.providers set landing_path = null where slug = 'vultr';
+
+-- Vultr's product catalog was permanently discontinued (3 products) and its
+-- generic /cloud-accounts/vultr page delisted at the application level (see
+-- src/lib/delisted-providers.ts). The provider row itself is kept — unrelated
+-- content (comparison articles, homepage write-ups) still references it by
+-- slug — only its products are removed. ON DELETE CASCADE/SET NULL on
+-- product_images, faqs, reviews, and leads (see 0001_init.sql) makes this a
+-- safe, self-contained delete; no other tables need touching.
+delete from public.products
+where slug in ('vultr-account-200-credit', 'vultr-account-250-credit', 'vultr-account-300-credit');
 
 -- Note: the AWS provider's rich landing-page `content` (and its dedicated
 -- FAQs) that used to live here have been removed. /providers/aws is back to
@@ -143,10 +151,8 @@ insert into public.products (slug, title, provider_id, category_id, price, sort_
 ('linode-account-100-credit', 'Linode Account — $100 Credit', (select id from public.providers where slug = 'linode'), (select id from public.categories where slug = 'cloud-credits'), 20, 30),
 ('linode-account-port-25-open', 'Linode Account — Port 25 Open', (select id from public.providers where slug = 'linode'), (select id from public.categories where slug = 'cloud-accounts'), 100, 31),
 
--- Vultr
-('vultr-account-200-credit', 'Vultr Account — $200 Credit', (select id from public.providers where slug = 'vultr'), (select id from public.categories where slug = 'cloud-credits'), 22, 32),
-('vultr-account-250-credit', 'Vultr Account — $250 Credit', (select id from public.providers where slug = 'vultr'), (select id from public.categories where slug = 'cloud-credits'), 25, 33),
-('vultr-account-300-credit', 'Vultr Account — $300 Credit', (select id from public.providers where slug = 'vultr'), (select id from public.categories where slug = 'cloud-credits'), 30, 34),
+-- Vultr's 3 products (vultr-account-200/250/300-credit) were permanently
+-- discontinued — see the DELETE statement below for an already-seeded DB.
 
 -- Oracle Cloud
 ('oracle-cloud-account-new-account', 'Oracle Cloud Account — Oracle New Account', (select id from public.providers where slug = 'oracle-cloud'), (select id from public.categories where slug = 'cloud-accounts'), 45, 35),
@@ -194,7 +200,6 @@ where slug in (
   'google-cloud-account-300-credit',
   'azure-account-free-trial',
   'digitalocean-account-close-port-3',
-  'vultr-account-200-credit',
   'oracle-cloud-account-new-account'
 );
 

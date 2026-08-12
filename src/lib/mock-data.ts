@@ -108,10 +108,12 @@ export const mockProviders: Provider[] = [
     slug: "vultr",
     name: "Vultr",
     display_title: "Buy Vultr Cloud Account",
-    // The dedicated /cloud-accounts/buy-vultr-cloud-account landing page was
-    // removed; Vultr now falls through to the generic /cloud-accounts/vultr
-    // template (see getProviderHref in lib/utils.ts). The provider and its
-    // real products are unaffected.
+    // Vultr's dedicated landing page, generic /cloud-accounts page, and
+    // entire product catalog have all been permanently discontinued (see
+    // src/lib/delisted-providers.ts). This provider record is kept only so
+    // unrelated content that already references it by slug — comparison
+    // articles, the homepage provider write-up — keeps working; it has no
+    // public product page anymore.
     landing_path: null,
     logo_url: "/logos/vultr.svg",
     tagline: "Global cloud compute infrastructure",
@@ -337,10 +339,8 @@ const productSeeds: ProductSeed[] = [
   { id: "prod-linode-100-credit", slug: "linode-account-100-credit", title: "Linode Account — $100 Credit", provider_id: "prov-linode", category_id: "cat-credits", price: 20 },
   { id: "prod-linode-port-25-open", slug: "linode-account-port-25-open", title: "Linode Account — Port 25 Open", provider_id: "prov-linode", category_id: "cat-accounts", price: 100 },
 
-  // Vultr
-  { id: "prod-vultr-200-credit", slug: "vultr-account-200-credit", title: "Vultr Account — $200 Credit", provider_id: "prov-vultr", category_id: "cat-credits", price: 22, featured: true },
-  { id: "prod-vultr-250-credit", slug: "vultr-account-250-credit", title: "Vultr Account — $250 Credit", provider_id: "prov-vultr", category_id: "cat-credits", price: 25 },
-  { id: "prod-vultr-300-credit", slug: "vultr-account-300-credit", title: "Vultr Account — $300 Credit", provider_id: "prov-vultr", category_id: "cat-credits", price: 30 },
+  // Vultr's 3 products (vultr-account-200/250/300-credit) were permanently
+  // discontinued and removed — see src/lib/delisted-providers.ts.
 
   // Oracle Cloud
   { id: "prod-oracle-new-account", slug: "oracle-cloud-account-new-account", title: "Oracle Cloud Account — Oracle New Account", provider_id: "prov-oracle", category_id: "cat-accounts", price: 45, featured: true },

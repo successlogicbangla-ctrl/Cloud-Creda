@@ -61,7 +61,10 @@ export default async function HomePage() {
   ]);
 
   const providerBySlug = new Map(providers.map((p) => [p.slug, p]));
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  // Production domain — never localhost, even if NEXT_PUBLIC_SITE_URL isn't
+  // set in the deploy environment. Matches the fallback used in
+  // src/app/layout.tsx, sitemap.ts, and robots.ts.
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.cloudcreda.com";
 
   return (
     <>

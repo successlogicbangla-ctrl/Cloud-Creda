@@ -9,6 +9,7 @@ const columns: { title: string; links: { label: string; href: string }[] }[] = [
     links: [
       { label: "All Products", href: "/products" },
       { label: "Cloud Accounts", href: "/cloud-accounts" },
+      { label: "Categories", href: "/categories" },
       { label: "Search", href: "/search" },
     ],
   },
@@ -16,6 +17,7 @@ const columns: { title: string; links: { label: string; href: string }[] }[] = [
     title: "Resources",
     links: [
       { label: "Compare", href: "/compare" },
+      { label: "Articles", href: "/articles" },
       { label: "FAQ", href: "/faq" },
       { label: "How It Works", href: "/how-it-works" },
     ],

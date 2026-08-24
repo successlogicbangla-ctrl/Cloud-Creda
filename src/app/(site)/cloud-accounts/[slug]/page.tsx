@@ -179,7 +179,10 @@ export default async function CloudAccountPage({ params }: PageProps) {
     relatedProducts = featured.filter((p) => p.provider_id !== provider.id).slice(0, 3);
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  // Production domain — never localhost, even if NEXT_PUBLIC_SITE_URL isn't
+  // set in the deploy environment. Matches the fallback used in
+  // src/app/layout.tsx, sitemap.ts, and robots.ts.
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.cloudcreda.com";
   const itemListJsonLd = hasRichContent && products.length > 0 && {
     "@context": "https://schema.org",
     "@type": "ItemList",

@@ -7,7 +7,10 @@ export interface Crumb {
 }
 
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  // Production domain — never localhost, even if NEXT_PUBLIC_SITE_URL isn't
+  // set in the deploy environment. Matches the fallback used in
+  // src/app/layout.tsx, sitemap.ts, and robots.ts.
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.cloudcreda.com";
 
   const jsonLd = {
     "@context": "https://schema.org",
